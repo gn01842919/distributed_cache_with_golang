@@ -12,7 +12,7 @@ type Cache interface {
 
 // New for Cache
 func New(typ string) Cache {
-	var c Cache // Why not pointer??
+	var c Cache // TODO: Why not pointer?? Does 'return' acts like std::move in C++?
 	if typ == "inmemory" {
 		c = newInMemoryCache()
 	}

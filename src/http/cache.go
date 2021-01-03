@@ -8,7 +8,7 @@ import (
 )
 
 type cacheHandler struct {
-	*Server
+	*Server  // Why use pointer here?
 }
 
 // To implement interface: http.Handler

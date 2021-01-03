@@ -19,5 +19,5 @@ func (s *Server) Listen() {
 
 // New server
 func New(c cache.Cache) *Server {
-	return &Server{c}
+	return &Server{c} // TODO: Why returns pointer here but not in New inside cache/cache.go??
 }

@@ -9,7 +9,7 @@ type Stat struct {
 
 func (s *Stat) add(k string, v []byte) {
 	s.Count++
-	s.KeySize += int64(len(k)) // Note int64 conversion here!!
+	s.KeySize += int64(len(k)) // TODO: Why int64 conversion here??
 	s.ValueSize += int64(len(v))
 }
 

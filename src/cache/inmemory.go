@@ -7,7 +7,7 @@ import (
 type inMemoryCache struct {
 	c     map[string][]byte
 	mutex sync.RWMutex
-	Stat
+	Stat  // TODO: Why not pointer here but uses pointer in cacheHandler in http/cache.go??
 }
 
 func (c *inMemoryCache) Set(k string, v []byte) error {
@@ -44,7 +44,8 @@ func (c *inMemoryCache) GetStat() Stat {
 }
 
 func newInMemoryCache() *inMemoryCache {
-	//  So we can return a reference to a local variable?
+	// Solved: So we can return a reference to a local variable?
+	// ==> Yes. In go, this will be saved in heap. It is same as using new()
 	return &inMemoryCache{
 		make(map[string][]byte), sync.RWMutex{}, Stat{}}
 }
