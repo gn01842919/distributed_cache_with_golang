@@ -47,6 +47,22 @@ func (c *httpClient) set(key, value string) {
 	}
 }
 
+func (c *httpClient) del(key string) {
+	req, e := http.NewRequest(http.MethodDelete, c.server+key, nil)
+	if e != nil {
+		log.Println(key)
+		panic(e)
+	}
+	resp, e := c.Do(req)
+	if e != nil {
+		log.Println(key)
+		panic(e)
+	}
+	if resp.StatusCode != http.StatusOK {
+		panic(resp.Status)
+	}
+}
+
 func (c *httpClient) Run(cmd *Cmd) {
 	if cmd.Name == "get" {
 		cmd.Value = c.get(cmd.Key)
@@ -55,6 +71,10 @@ func (c *httpClient) Run(cmd *Cmd) {
 	}
 	if cmd.Name == "set" {
 		c.set(cmd.Key, cmd.Value)
+		return
+	}
+	if cmd.Name == "del" {
+		c.del(cmd.Key)
 		return
 	}
 	panic("unknown cmd name " + cmd.Name)
