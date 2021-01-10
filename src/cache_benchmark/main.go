@@ -6,6 +6,8 @@ import (
 	"math/rand"
 	"strings"
 	"time"
+
+	"./cacheclient"
 )
 
 var typ, server, operation string
@@ -86,7 +88,7 @@ func operate(id, count int, ch chan *result) {
 				name = "get"
 			}
 		}
-		c := cacheclient.cmd{name, key, value, nil}
+		c := &cacheclient.Cmd{name, key, value, nil}
 		if pipelen > 1 {
 			cmds = append(cmds, c)
 			if len(cmds) == pipelen {
@@ -156,8 +158,8 @@ func run(client cacheclient.Client, c *cacheclient.Cmd, r *result) {
 	resultType := c.Name
 	if resultType == "get" {
 		if c.Value == "" {
-			resultType == "miss"
-		} elseif clValue != expect {
+			resultType = "miss"
+		} else if c.Value != expect {
 			panic(c)
 		}
 	}
@@ -172,9 +174,9 @@ func pipeline(client cacheclient.Client, cmds []*cacheclient.Cmd, r *result) {
 		}
 	}
 	start := time.Now()
-	client.PipelineRun(cmds)
+	client.PipelinedRun(cmds)
 	d := time.Now().Sub(start)
-	for i, c :=range cmds {
+	for i, c := range cmds {
 		resultType := c.Name
 		if resultType == "get" {
 			if c.Value == "" {

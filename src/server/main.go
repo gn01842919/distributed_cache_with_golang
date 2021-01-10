@@ -1,8 +1,9 @@
 package main
 
 import (
-	"cache"
-	"http"
+	"./http"
+
+	"./cache"
 )
 
 func main() {

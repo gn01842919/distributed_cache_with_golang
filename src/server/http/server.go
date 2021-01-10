@@ -1,8 +1,9 @@
 package http
 
 import (
-	"cache"
 	"net/http"
+
+	"../cache"
 )
 
 // Server cache
