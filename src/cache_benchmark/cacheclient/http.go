@@ -85,6 +85,19 @@ func newHTTPClient(server string) *httpClient {
 	return &httpClient{client, "http://" + server + ":12345/cache/"}
 }
 
-func (c *httpClient) PipelinedRun([]*Cmd) {
-	panic("httpClient pipelined run not implemented")
+func (c *httpClient) PipelinedRun(cmds []*Cmd) {
+	if len(cmds) == 0 {
+		return
+	}
+	for _, cmd := range cmds {
+		if cmd.Name == "get" {
+			cmd.Value = c.get(cmd.Key)
+		} else if cmd.Name == "set" {
+			c.set(cmd.Key, cmd.Value)
+		} else if cmd.Name == "del" {
+			c.del(cmd.Key)
+		} else {
+			panic("unknown cmd name " + cmd.Name)
+		}
+	}
 }
